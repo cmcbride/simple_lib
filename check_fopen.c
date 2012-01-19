@@ -22,8 +22,7 @@ FILE
             fprintf( stderr, "ERROR: cannot allocate a string of %zd elements\n", len);
             exit( EXIT_FAILURE );
         }
-        // possible buffer overflow, we assume we add less than 40 chars
-        sprintf( msg , "could not open '%s' (mode %s)", path, mode );
+        snprintf( msg , len, "could not open '%s' (mode %s)", path, mode );
         if( 0 == errno ) {
             fprintf( stderr, "ERROR: %s\n", msg );
         } else {
