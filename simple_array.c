@@ -38,7 +38,7 @@ sa_check_not_null( simple_array const *const sa )
 }
 
 void
-sa_init( simple_array * const sa, const size_t count, const size_t size )
+sa_alloc( simple_array * const sa, const size_t count, const size_t size )
 {
     sa_check_not_null( sa );
     sa->data = check_alloc( count, size );
@@ -50,26 +50,26 @@ void
 sa_clean( simple_array * const sa )
 {
     if( NULL != sa ) {
-        CHECK_CLEAN( sa->data );
+        CHECK_FREE( sa->data );
         sa->count = 0;
         sa->size = 0;
     }
 }
 
 simple_array *
-sa_create( const size_t count, const size_t size )
+sa_init( const size_t count, const size_t size )
 {
     simple_array *sa;
     sa = check_alloc( 1, sizeof( simple_array ) );
-    sa_init( sa );
+    sa_alloc( sa );
     return sa;
 }
 
 simple_array *
-sa_destroy( simple_array * sa )
+sa_kill( simple_array * sa )
 {
     sa_clean( sa );
-    CHECK_CLEAN( sa );
+    CHECK_FREE( sa );
 }
 
 void
