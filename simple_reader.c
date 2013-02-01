@@ -47,6 +47,22 @@ sr_buf_alloc( simple_reader * sr, const size_t maxlen )
     sr->buf = check_realloc( sr->buf, sr->buf_size, sizeof( char ) );
 }
 
+void
+sr_buf_clean( simple_reader * sr )
+{
+    if( NULL != sr ) {
+        CHECK_FREE( sr->buf );
+        sr->buf_size = 0;
+    }
+}
+
+static inline void
+sr_set_line_maxlen( simple_reader * sr, const size_t maxlen )
+{
+    /* just a more sane external name for same functionality */
+    sr_buf_alloc( sr, maxlen );
+}
+
 size_t
 sr_buf_maxlen( simple_reader const *const sr )
 {
@@ -57,30 +73,44 @@ sr_buf_maxlen( simple_reader const *const sr )
 }
 
 void
-sr_buf_clean( simple_reader * sr )
+sr_buf_wipe( simple_reader * sr )
 {
-    if( NULL != sr ) {
-        CHECK_CLEAN( sr->buf );
-        sr->buf_size = 0;
+    size_t i;
+    for( i = 0; i < sr->buf_size; i++ ) {
+        sr->buf[i] = '\0';
     }
 }
 
 void
-sr_init( simple_reader * const sr, char const *const filename )
+sr_setfile( simple_reader * const sr, char const *const filename )
 {
     size_t len;
 
-    sr_check_not_null( sr );
-
+    if( sr->fp != NULL )
+        fclose( sr->fp );
     sr->fp = check_fopen( filename, "r" );
 
+    /* if sr->filename is NULL then check_realloc will calloc it */
     len = strlen( filename ) + 1;
-    sr->filename = check_alloc( len, sizeof( char ) );
+    sr->filename = check_realloc( sr->filename, len, sizeof( char ) );
     strncpy( sr->filename, filename, len );
 
-    /* choose a reasonable default line buffer size */
-    sr_buf_alloc( sr, 1024 );
     sr->line_num = 0;
+    sr_buf_wipe( sr );
+}
+
+void
+sr_alloc( simple_reader * const sr, char const *const filename )
+{
+    sr_check_not_null( sr );
+
+    if( filename != NULL ) {
+        sr_setfile( sr, filename );
+    }
+
+    /* choose a reasonable default line buffer size if not already set */
+    if( NULL == sr->buf || sr->buf_size < 1 )
+        sr_buf_alloc( sr, 1024 );
 }
 
 void
@@ -88,26 +118,26 @@ sr_clean( simple_reader * const sr )
 {
     if( NULL != sr ) {
         fclose( sr->fp );
-        CHECK_CLEAN( sr->filename );
+        CHECK_FREE( sr->filename );
         sr_buf_clean( sr );
         sr->line_num = 0;
     }
 }
 
 simple_reader *
-sr_create( char const *const filename )
+sr_init( char const *const filename )
 {
     simple_reader *sr;
     sr = check_alloc( 1, sizeof( simple_reader ) );
-    sr_init( sr, filename );
+    sr_alloc( sr, filename );
     return sr;
 }
 
 simple_reader *
-sr_destroy( simple_reader * sr )
+sr_kill( simple_reader * sr )
 {
     sr_clean( sr );
-    CHECK_CLEAN( sr );
+    CHECK_FREE( sr );
     return NULL;
 }
 
