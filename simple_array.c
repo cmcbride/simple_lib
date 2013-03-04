@@ -60,8 +60,8 @@ simple_array *
 sa_init( const size_t count, const size_t size )
 {
     simple_array *sa;
-    sa = check_alloc( 1, sizeof( simple_array ) );
-    sa_alloc( sa );
+    sa = ( simple_array * ) check_alloc( 1, sizeof( simple_array ) );
+    sa_alloc( sa, count, size );
     return sa;
 }
 
@@ -70,20 +70,23 @@ sa_kill( simple_array * sa )
 {
     sa_clean( sa );
     CHECK_FREE( sa );
+    return NULL;
 }
 
-void
-sa_set_length( simple_array * sa, const size_t new_count )
+void *
+sa_set_length( simple_array * const sa, const size_t new_count )
 {
     sa_check_not_null( sa );
     if( new_count != sa->count ) {
         sa->data = check_realloc( sa->data, new_count, sa->size );
         sa->count = new_count;
     }
+
+    return sa->data;
 }
 
 void *
-sa_ensure_length( simple_array * sa, const size_t count )
+sa_ensure_length( simple_array * const sa, const size_t count )
 {
     sa_check_not_null( sa );
     size_t new_count;
@@ -93,10 +96,8 @@ sa_ensure_length( simple_array * sa, const size_t count )
 
     /* for efficiency, try to realloc to a FACTOR of new elements */
     new_count = sa->count * SA_GROW_BY_FACTOR;
-    sa->data = check_realloc( sa->data, new_count, sa->size );
-    sa->count = new_count;
 
-    return sa->data;
+    return sa_set_length( sa, new_count );
 }
 
 static inline int
