@@ -48,6 +48,16 @@ These functions are all prefixed with "sa_" for "simple_array".
 
 See source for more details. 
 
+
+SIMPLE_PARAM
+------------
+An interface to handle input parameter file. This might _later_ be extended to 
+handle command line arguments, but not for now. 
+These functions are all prefixed with "sp_" for "simple_param". 
+
+See source for more details. 
+
+
 TODO
 ----
 Better documentation.
