@@ -189,6 +189,8 @@ sp_check_required( simple_param const *const sp )
     int i;
     int ntags_set = 0, error = 0;
 
+    sp_check_not_null( sp );
+
     for( i = 0; i < sp->ntags; i++ ) {
         if( sp->dval[i] != NULL )
             continue;
@@ -211,6 +213,8 @@ void
 sp_print_tags( simple_param const *const sp )
 {
     int i;
+
+    sp_check_not_null( sp );
 
     for( i = 0; i < sp->ntags; i++ ) {
         fprintf( stdout, "SIMPLE_PARAM: '%s' of type %d\n", sp->tag[i], sp->ptype[i] );
@@ -315,11 +319,13 @@ sp_setval( simple_param const *const sp, const int index, char *val )
     return res;
 }
 
-/* remove? */
 void
 sp_set_defaults( simple_param const *const sp )
 {
     int i;
+
+    sp_check_not_null( sp );
+
     for( i = 0; i < sp->ntags; i++ ) {
 
         if( '\0' == sp->tag[i][0] )     /* this is the "processed" flag */
@@ -338,6 +344,8 @@ sp_parse_line( simple_param const *const sp, char *line )
     char *tag;
     char *val;
     size_t ltag, lline;
+
+    sp_check_not_null( sp );
 
     /* this does not have to be efficient! */
     lline = strlen( line );
