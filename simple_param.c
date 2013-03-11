@@ -340,9 +340,8 @@ sp_set_defaults( simple_param const *const sp )
 int
 sp_parse_line( simple_param const *const sp, char *line )
 {
-    int i, k, res = 0;
+    int i, res = 0;
     char *tag;
-    char *val;
     size_t ltag, lline;
 
     sp_check_not_null( sp );
@@ -357,6 +356,10 @@ sp_parse_line( simple_param const *const sp, char *line )
             continue;
 
         if( strncmp( line, tag, ltag ) == 0 ) {
+            size_t k;
+            char *val;
+
+            val = &line[ltag];
             /* skip over initial whitespace in value */
             for( k = ltag; k < lline; k++ ) {
                 val = &line[k];
