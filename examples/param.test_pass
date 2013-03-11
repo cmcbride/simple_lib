@@ -1,0 +1,11 @@
+# this is a comment
+char y
+sint -42
+uint 123
+float 10.3 
+double 1.3e-3
+string blah_this_can_be_a_filename?
+array_sint -1 2 -3 4 
+array_uint 1, 2, 3, 4 
+array_float 1.1, 2.2, 3.3
+array_double 10.1; 20.2; 30.3
