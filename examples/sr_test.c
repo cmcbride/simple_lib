@@ -16,7 +16,7 @@ main( int argc, char **argv )
         exit( EXIT_FAILURE );
     }
 
-    sr = sr_init( argv[1] );
+    sr = sr_alloc( argv[1] );
 
     if( argc >= 3 ) {
         size_t maxlinelen;
@@ -37,7 +37,7 @@ main( int argc, char **argv )
     fprintf( stderr, "Read %d lines from file: %s\n", sr_linenum( sr ), sr_filename( sr ) );
     fprintf( stderr, "Line Lengths: min = %d ; max = %d\n", lmin, lmax );
 
-    sr_kill( sr );
+    sr_clean( sr );
 
     return EXIT_SUCCESS;
 }

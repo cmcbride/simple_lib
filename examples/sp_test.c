@@ -20,7 +20,7 @@ main( int argc, char **argv )
         exit( EXIT_FAILURE );
     }
 
-    sp = sp_init( 10 );
+    sp = sp_alloc( 10 );
     sp_add_char( sp, "char", &c, NULL );
     sp_add_sint( sp, "sint", &ti, NULL );
     sp_add_uint( sp, "uint", &tu, NULL );
@@ -39,7 +39,7 @@ main( int argc, char **argv )
     sp_parse_file( sp, argv[1] );
     sp_check_required( sp );
 
-    sp_kill( sp );
+    sp_clean( sp );
 
     fprintf( stdout, "RESULTS:\n" );
     fprintf( stdout, " char:   %c\n", c );

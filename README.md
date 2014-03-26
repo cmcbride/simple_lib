@@ -60,7 +60,9 @@ See source for more details.
 
 TODO
 ----
-Better documentation.
+Better documentation.  Future "libraries" include:
+ * simple linked lists
+ * simple hashes
 
 
 AUTHOR

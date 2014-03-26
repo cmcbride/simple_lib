@@ -32,7 +32,7 @@ typedef struct {
 } simple_param;
 
 simple_param *
-sp_init( size_t const max_tags )
+sp_alloc( size_t const max_tags )
 {
     simple_param *sp;
 
@@ -50,7 +50,7 @@ sp_init( size_t const max_tags )
 }
 
 simple_param *
-sp_kill( simple_param * sp )
+sp_clean( simple_param * sp )
 {
     int i;
 
@@ -381,7 +381,7 @@ sp_parse_file( simple_param const *const sp, char *filename )
     simple_reader *sr;
     int ntags_read = 0;
 
-    sr = sr_init( filename );
+    sr = sr_alloc( filename );
     while( sr_readline( sr ) ) {
         char *line;
         int check;
@@ -402,7 +402,7 @@ sp_parse_file( simple_param const *const sp, char *filename )
             exit( EXIT_FAILURE );
         }
     }
-    sr_kill( sr );
+    sr_clean( sr );
 
     return ntags_read;
 }

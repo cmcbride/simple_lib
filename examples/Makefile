@@ -1,4 +1,4 @@
-CC=gcc
+CC=cc
 
 CFLAGS= -Wall -Winline -I.. -I$(HOME)/code/check_utils/
 CLINK= 

@@ -24,7 +24,7 @@ typedef struct {
     FILE *fp;
     char *filename;
     char *buf;
-    size_t buf_size;
+    size_t buf_size;            /* allocated maximum size */
     size_t buf_len;
     size_t line_num;
 } simple_reader;
@@ -100,7 +100,7 @@ sr_setfile( simple_reader * const sr, char const *const filename )
 }
 
 void
-sr_alloc( simple_reader * const sr, char const *const filename )
+sr_init( simple_reader * const sr, char const *const filename )
 {
     sr_check_not_null( sr );
 
@@ -114,7 +114,7 @@ sr_alloc( simple_reader * const sr, char const *const filename )
 }
 
 void
-sr_clean( simple_reader * const sr )
+sr_kill( simple_reader * const sr )
 {
     if( NULL != sr ) {
         fclose( sr->fp );
@@ -125,18 +125,18 @@ sr_clean( simple_reader * const sr )
 }
 
 simple_reader *
-sr_init( char const *const filename )
+sr_alloc( char const *const filename )
 {
     simple_reader *sr;
     sr = ( simple_reader * ) check_alloc( 1, sizeof( simple_reader ) );
-    sr_alloc( sr, filename );
+    sr_init( sr, filename );
     return sr;
 }
 
 simple_reader *
-sr_kill( simple_reader * sr )
+sr_clean( simple_reader * sr )
 {
-    sr_clean( sr );
+    sr_kill( sr );
     CHECK_FREE( sr );
     return NULL;
 }
